@@ -115,5 +115,3 @@ FastAPI est un choix intéressant pour ses avantages :
      - Résultat : Liste des cavités recensées dans la zone, avec détails sur leur nature, origine, et risque associé.  
 
 ---
-``` 
-
