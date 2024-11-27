@@ -1,6 +1,6 @@
 
 
-Ce Repository montre la création d’une API à partir du framework Python **FastAPI**.  
+Ce repository montre la création d’une API à partir du framework Python **FastAPI**.  
 Il interroge des services gouvernementaux français tels que l'API Addok (pour la recherche d'adresses) et l'API CatNat (informations sur les catastrophes naturelles).  
 
 ---
