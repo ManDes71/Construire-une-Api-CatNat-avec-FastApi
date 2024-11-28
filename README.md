@@ -74,7 +74,7 @@ FastAPI est un choix intéressant pour ses avantages :
    - **Points forts** :  
      - Utilisation facile avec des requêtes simples (`q=adresse`).  
      - Précision élevée avec des scores pour évaluer la pertinence.  
-   - **Exemple dans votre code** :  
+   - **Exemple ** :  
      ```bash
      http://api-adresse.data.gouv.fr/search/?q=adresse
      ```
@@ -84,7 +84,7 @@ FastAPI est un choix intéressant pour ses avantages :
    - **Objectif** : Fournir des informations sur les zones à risque et les événements de catastrophes naturelles.  
    - **Fonctionnalité exploitée** :  
      - Recherche par coordonnées géographiques et rayon de recherche.  
-   - **Exemple dans votre code** :  
+   - **Exemple ** :  
      ```bash
      https://georisques.gouv.fr/api/v1/gaspar/catnat/?longitude=2.3522&latitude=48.8566&rayon=1000
      ```
@@ -92,7 +92,7 @@ FastAPI est un choix intéressant pour ses avantages :
 
 3. **API AZI (Aléa Zones Inondables)** :  
    - **Objectif** : Fournir des informations sur les zones présentant un risque d’inondation.  
-   - **Exemple dans votre code** :  
+   - **Exemple ** :  
      ```bash
      https://georisques.gouv.fr/api/v1/azi
      ```
@@ -100,7 +100,7 @@ FastAPI est un choix intéressant pour ses avantages :
 
 4. **API Zonage Sismique** :  
    - **Objectif** : Fournir des informations sur la classification sismique des zones en France.  
-   - **Exemple dans votre code** :  
+   - **Exemple ** :  
      ```bash
      https://georisques.gouv.fr/api/v1/zonage-sismique
      ```
@@ -108,7 +108,7 @@ FastAPI est un choix intéressant pour ses avantages :
 
 5. **API Cavités** :  
    - **Objectif** : Recenser les cavités souterraines (naturelles ou anthropiques) pouvant présenter un risque pour la stabilité des sols.  
-   - **Exemple dans votre code** :  
+   - **Exemple ** :  
      ```bash
      https://georisques.gouv.fr/api/v1/cavites
      ```
