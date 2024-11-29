@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recherche CatNat et Documentation</title>
+    <!-- CSS de Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- JS de Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .tabs {
+            display: flex;
+            background-color: #f1f1f1;
+            border-bottom: 2px solid #ccc;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 14px 16px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            border-bottom: none;
+        }
+        .tab:hover {
+            background-color: #ddd;
+        }
+        .tab.active {
+            background-color: white;
+            border-bottom: 2px solid white;
+        }
+        .content {
+            display: none;
+            padding: 20px;
+        }
+        .content.active {
+            display: block;
+        }
+        iframe {
+            width: 100%;
+            height: 80vh;
+            border: none;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .error {
+            color: red;
+        }
+        #map {
+            height: 400px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab(0)">Présentation</div>
+        <div class="tab" onclick="switchTab(1)">Recherche CatNat</div>
+        <div class="tab" onclick="switchTab(2)">Documentation API</div>
+    </div>
+
+    <div class="content active" id="tab-0">
+    <h1 style="text-align: center; color: #2c3e50; font-size: 2.5em; text-transform: uppercase; margin-bottom: 20px;">
+        Présentation de FastAPI
+    </h1>
+    <p style="font-size: 1.2em; line-height: 1.6; color: #34495e; margin-bottom: 20px;">
+        Ce mini projet est la création d’une API à partir du framework Python FastAPI.
+Il interroge des services gouvernementaux français tels que l'API Addok (pour la recherche d'adresses) et l'API CatNat (informations sur les catastrophes naturelles).
+    </p>
+
+    <h2 style="color: #2980b9; font-size: 2em; margin-bottom: 15px;">Pourquoi FastAPI ?</h2>
+    <div style="margin-left: 20px; margin-bottom: 20px;">
+        <p><strong>Performance élevée :</strong></p>
+        <ul style="line-height: 1.6; margin-bottom: 15px;">
+            <li>Construit sur Starlette et Pydantic, il offre des performances proches de celles d'outils comme Node.js et Go.</li>
+            <li>Idéal pour des applications nécessitant des réponses rapides, comme les appels API.</li>
+            <li>
+                <span style="color: #2c3e50; font-weight: bold;">Starlette</span> est un framework léger et asynchrone pour développer des applications web en Python.<br/> Il se concentre sur les performances et la modularité, tout en respectant le standard ASGI (Asynchronous Server Gateway Interface).
+            </li>
+            <li>
+                <span style="color: #2c3e50; font-weight: bold;">Pydantic</span> est une bibliothèque Python utilisée pour la validation et la gestion des données structurées.<br/>Elle se base sur les annotations de type Python et offre une validation automatique des données d'entrée et de sortie.
+            </li>
+        </ul>
+        <p><strong>Documentation automatique :</strong></p>
+        <ul style="line-height: 1.6; margin-bottom: 15px;">
+            <li>Documentation interactive générée automatiquement à partir des types Python (OpenAPI et Swagger UI).</li>
+            <li>Accessible via <code style="color: #e74c3c;">/docs</code>.</li>
+			<li>OpenAPI est une spécification standardisée pour décrire des APIs REST.</li>
+            <li>Swagger UI est une interface utilisateur interactive permettant d'explorer, de tester et de documenter des APIs en utilisant la spécification OpenAPI.</li>
+        </ul>
+        <p><strong>Gestion des données structurées :</strong></p>
+        <ul style="line-height: 1.6;">
+            <li>Les modèles basés sur Pydantic assurent une validation stricte des entrées et des sorties JSON.</li>
+        </ul>
+		<p><strong>Middleware intégré :</strong></p>
+        <ul style="line-height: 1.6;">
+            <li>Par exemple, le middleware <strong>CORS</strong> (Cross-Origin Resource Sharing) est configuré pour permettre l'accès depuis d'autres domaines.</li>
+        </ul>
+    </div>
+
+    <h2 style="color: #2980b9; font-size: 2em; margin-bottom: 15px;">Fonctionnalités de l'API</h2>
+    <div style="margin-left: 20px; margin-bottom: 20px;">
+        <p><strong>1. Recherche d'adresses avec l'API Addok :</strong></p>
+        <ul style="line-height: 1.6; margin-bottom: 15px;">
+            <li><strong>Endpoint :</strong> /api/v1/{adresse}</li>
+            <li>
+                <strong>Description :</strong> Envoie une requête à l'API publique Addok pour rechercher des adresses.<br/>Retourne des informations enrichies (latitude, longitude, score, ville, code postal, etc.).
+            </li>
+			<li>
+                <strong>Utilisation typique :</strong> GET /api/v1/8 bd du port<br/>Réponse JSON structurée avec les coordonnées et détails de l'adresse.
+            </li>
+        </ul>
+        <p><strong>2. Recherche des événements CatNat :</strong></p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Endpoint :</strong> /api/v1/catnat/</li>
+            <li>
+                <strong>Description :</strong> Interroge l'API Géorisques pour obtenir des informations sur les catastrophes naturelles dans un rayon défini autour d'une position géographique.<br/>Retourne une liste d'événements (type, date, gravité, etc.).
+            </li>
+			<li>
+                <strong>Utilisation typique :</strong> GET /api/v1/catnat/?longitude=2.3522&latitude=48.8566&rayon=1000<br/>Réponse contenant les événements trouvés pour les coordonnées fournies.
+            </li>
+        </ul>
+    </div>
+	<h2 style="color: #2980b9; font-size: 2em; margin-bottom: 15px;">Valeur ajoutée de l’API</h2>
+    <div style="margin-left: 20px; margin-bottom: 20px;">
+        <p><strong>1. Centralisation des données :</strong></p>
+        <ul style="line-height: 1.6; margin-bottom: 15px;">
+            <li>
+                Les utilisateurs accèdent à des informations variées (adresses, catastrophes naturelles, inondations, risques sismiques, cavités) via une seule API, simplifiant l'intégration des services.
+            </li>
+        </ul>
+        <p><strong>Utilisation des données publiques :</strong></p>
+        <ul style="line-height: 1.6;">
+            <li>
+                Les données issues des services Géorisques et d'autres APIs gouvernementales deviennent facilement exploitables.
+            </li>
+        </ul>
+		<p><strong>Adaptabilité et extensibilité :</strong></p>
+        <ul style="line-height: 1.6;">
+            <li>
+                L'API est conçue pour intégrer facilement d'autres sources de données gouvernementales, ajoutant des fonctionnalités au besoin.
+        </ul>
+    </div>
+
+    <h2 style="color: #2980b9; font-size: 2em; margin-bottom: 15px;">Quelques API Gouvernementales Françaises</h2>
+    <div style="margin-left: 20px;">
+        <p><strong>API Addok (api-adresse.data.gouv.fr) :</strong></p>
+        <ul style="line-height: 1.6; margin-bottom: 15px;">
+            <li><strong>Objectif :</strong> Fournir une recherche d'adresses et de géocodage à partir de textes.</li>
+			<li><strong>Exemple :</strong> http://api-adresse.data.gouv.fr/search/?q=adresse <br/>Résultat : Liste des événements correspondant à une zone géographique donnée.</li>
+			
+        </ul>
+        <p><strong>API CatNat (Géorisques - Ministère de la Transition écologique) :</strong></p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Objectif :</strong> Fournir des informations sur les zones à risque et les événements de catastrophes naturelles.</li>
+			<li><strong>Exemple :</strong> https://georisques.gouv.fr/api/v1/gaspar/catnat/?longitude=2.3522&latitude=48.8566&rayon=1000<br/>Résultat : Liste des événements correspondant à une zone géographique donnée.</li>
+        </ul>
+		<p><strong>API AZI (Aléa Zones Inondables) :</strong></p>
+        <ul style="line-height: 1.6; margin-bottom: 15px;">
+            <li><strong>Objectif :</strong> Fournir des informations sur les zones présentant un risque d’inondation.</li>
+			<li><strong>Exemple :</strong> https://georisques.gouv.fr/api/v1/azi<br/>Résultat : Aléa inondation, classe de risque, et détails par parcelle.</li>
+        </ul>
+        <p><strong>API Zonage Sismique :</strong></p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Objectif :</strong> Fournir des informations sur la classification sismique des zones en France.</li>
+			<li><strong>Exemple :</strong> https://georisques.gouv.fr/api/v1/zonage-sismique<br/>Résultat : Niveau de sismicité et description du zonage.</li>
+        </ul>
+		<p><strong>API Cavités :</strong></p>
+        <ul style="line-height: 1.6;">
+            <li><strong>Objectif :</strong> Recenser les cavités souterraines (naturelles ou anthropiques) pouvant présenter un risque pour la stabilité des sols.</li>
+			<li><strong>Exemple :</strong> https://georisques.gouv.fr/api/v1/cavites<br/>Résultat : Liste des cavités recensées dans la zone, avec détails sur leur nature, origine, et risque associé.</li>
+        </ul>
+    </div>
+</div>
+
+
+    <div class="content" id="tab-1">
+        <h1>Recherche des événements CatNat par Adresse (Localhost)</h1>
+        <div class="form-container">
+            <form id="address-form">
+                <label for="address">Adresse :</label><br>
+                <input type="text" id="address" name="address" placeholder="Exemple : 8+Boulevard+du+Port+80000+Amiens" required><br><br>
+                <label for="rayon">Rayon (en mètres) :</label><br>
+                <input type="number" id="rayon" name="rayon" value="1000" required><br><br>
+                <label for="page">Page :</label><br>
+                <input type="number" id="page" name="page" value="1" required><br><br>
+                <label for="page_size">Taille de page :</label><br>
+                <input type="number" id="page_size" name="page_size" value="20" required><br><br>
+                <button type="submit">Rechercher</button>
+            </form>
+            <div id="results" class="result"></div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <div class="content" id="tab-2">
+        <iframe src="http://localhost:8082/docs" title="Documentation API"></iframe>
+    </div>
+
+    <script>
+        function switchTab(tabIndex) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.content');
+
+            // Gérer les classes actives pour les onglets et les contenus
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            tabs[tabIndex].classList.add('active');
+            contents[tabIndex].classList.add('active');
+
+            // Ajuster la taille de la carte si elle est visible
+            if (tabIndex === 1 && map) {
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 300);
+            }
+        }
+
+        // Initialisation de la carte avec Leaflet
+        const map = L.map('map').setView([48.8566, 2.3522], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        let marker;
+        function updateMap(lat, lon, label) {
+            map.setView([lat, lon], 13);
+            if (marker) {
+                map.removeLayer(marker);
+            }
+            marker = L.marker([lat, lon]).addTo(map)
+                .bindPopup(`<strong>${label}</strong><br>Latitude : ${lat}<br>Longitude : ${lon}`)
+                .openPopup();
+        }
+
+        // Gestion du formulaire pour interroger les APIs
+        document.getElementById('address-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const address = document.getElementById('address').value;
+            const rayon = document.getElementById('rayon').value;
+            const page = document.getElementById('page').value;
+            const page_size = document.getElementById('page_size').value;
+
+            const addressApiUrl = `http://localhost:8082/api/v1/${encodeURIComponent(address)}`;
+
+            try {
+                const addressResponse = await fetch(addressApiUrl);
+                const addressData = await addressResponse.json();
+
+                if (!addressData || addressData.length === 0) {
+                    throw new Error("Aucune adresse trouvée.");
+                }
+
+                const firstResult = JSON.parse(addressData[0]);
+                const lon = firstResult.lon;
+                const lat = firstResult.lat;
+                const label = firstResult.label;
+
+                updateMap(lat, lon, label);
+
+                const catnatApiUrl = `http://localhost:8082/api/v1/catnat/?longitude=${lon}&latitude=${lat}&rayon=${rayon}&page=${page}&page_size=${page_size}`;
+                const catnatResponse = await fetch(catnatApiUrl);
+                const catnatData = await catnatResponse.json();
+
+                const resultDiv = document.getElementById('results');
+                resultDiv.innerHTML = `
+                    <h3>Adresse trouvée :</h3>
+                    <p>
+                        <strong>Adresse : </strong>${label}<br>
+                        <strong>Latitude : </strong>${lat}<br>
+                        <strong>Longitude : </strong>${lon}
+                    </p>
+                `;
+
+                if (catnatData.message === "Résultats trouvés" && catnatData.data.length > 0) {
+                    resultDiv.innerHTML += '<h3>Résultats CatNat :</h3>';
+                    catnatData.data.forEach((event, index) => {
+                        resultDiv.innerHTML += `
+                            <p>
+                                <strong>Événement ${index + 1} :</strong><br>
+                                Code CatNat : ${event.code_national_catnat}<br>
+                                Libellé du risque : ${event.libelle_risque_jo}<br>
+                                Commune : ${event.libelle_commune}<br>
+                                Date de début : ${event.date_debut_evt}<br>
+                                Date de fin : ${event.date_fin_evt}
+                            </p>
+                            <hr>
+                        `;
+                    });
+                } else {
+                    resultDiv.innerHTML += '<p>Aucun événement trouvé pour les coordonnées fournies.</p>';
+                }
+            } catch (error) {
+                document.getElementById('results').innerHTML = `<p class="error">Erreur : ${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
