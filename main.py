@@ -2,7 +2,6 @@
 from fastapi import FastAPI
 from models import Location
 from typing import List
-//from uuid import uuid4
 import requests
 from fastapi.middleware.cors import CORSMiddleware
 
