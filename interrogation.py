@@ -5,8 +5,8 @@ import json
 
 Loc: List[Location] = []
 
-url_adr = 'http://localhost:8000/api/v1/'
-url_hello= 'http://localhost:8000/'
+url_adr = 'http://localhost:8082/api/v1/'
+url_hello= 'http://localhost:8082/'
 
 
 
@@ -45,9 +45,9 @@ print("****************  Catnat ********************")
 #url = "https://georisques.gouv.fr/api/v1/gaspar/catnat"
 #param="rayon=1000&latlon="+str(lon)+","+str(lat)+"&page=1&page_size=10"
 
-#http://localhost:8000/api/v1/catnat/?longitude=2.290084&latitude=49.897442&rayon=1000&page=1&page_size=10
+#http://localhost:8082/api/v1/catnat/?longitude=2.290084&latitude=49.897442&rayon=1000&page=1&page_size=10
 
-url_catnat = 'http://localhost:8000/api/v1/catnat/'
+url_catnat = 'http://localhost:8082/api/v1/catnat/'
 param="longitude="+str(lon)+"&latitude="+str(lat)+"&rayon=1000&page=1&page_size=10"
 print(param)
 reponse = requests.get(url_catnat, params=param)
