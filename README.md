@@ -1,6 +1,7 @@
 Commandes à exécuter :  
 docker build  -t my-fastapi-georisque:latest .  
 docker run -p 8082:8000 my-fastapi-georisque  
+lancer http://localhost:8082/monapi_georisque.html  
 
 Ce repository montre la création d’une API à partir du framework Python **FastAPI**.  
 Il interroge des services gouvernementaux français tels que l'API Addok (pour la recherche d'adresses) et l'API CatNat (informations sur les catastrophes naturelles).  
